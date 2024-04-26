@@ -91,9 +91,10 @@ export default function Home({ isAdmin }: HomeProps) {
       .catch(error => console.error('There was a problem with the request:', error));
   };
 
-  // re-fetch concerts after created and set view to overview tab
+  // re-fetch concerts & stats after created and set view to overview tab
   const handleCreateConcert = async () => {
     fetchConcerts();
+    fetchStats();
     setView("overview");
     setShowSuccessMessage(true);
     setTimeout(() => {
@@ -137,6 +138,7 @@ export default function Home({ isAdmin }: HomeProps) {
         console.log(data);
         modalRef?.current?.close();
         fetchConcerts();
+        fetchStats();
         setShowDeleteMessage(true);
         setTimeout(() => {
           setShowDeleteMessage(false);
