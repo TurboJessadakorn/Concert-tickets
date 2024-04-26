@@ -26,6 +26,9 @@ export class Reserve {
   @ObjectIdColumn()
   concertId: ObjectId;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createDate: Date;
+  @Column()
+  concertName: string;
+
+  @Column({ type: 'timestamp', default: new Date() })
+  createDate: Date = new Date();
 }

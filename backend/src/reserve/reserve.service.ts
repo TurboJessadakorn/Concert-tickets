@@ -12,17 +12,21 @@ export class ReserveService {
     private readonly concertService: ConcertService
   ) {}
 
-  async reserve(username: string, userId: string, concertId: ObjectId): Promise<Reserve> {
-    // before create new reservation add userId to concertEntity and +total seat
+  async reserve(username: string, userId: string, concertId: ObjectId, concertName: string): Promise<Reserve> {
+    // before create new reservation add userId to concertEntity and +reserved seat
     const concert = await this.concertService.getConcertById(concertId);
     await this.concertService.reserveSeat(concert._id, userId);
 
-    const reserve = this.reserveRepository.create({ username, userId, action: ReservationAction.RESERVE, concertId });
+    const reserve = this.reserveRepository.create({ username, userId, action: ReservationAction.RESERVE, concertId, concertName });
     return this.reserveRepository.save(reserve);
   }
 
-  async cancel(username: string, userId: string, concertId: ObjectId): Promise<Reserve> {
-    const reservation = this.reserveRepository.create({ username, userId, action: ReservationAction.CANCEL, concertId });
+  async cancel(username: string, userId: string, concertId: ObjectId, concertName: string): Promise<Reserve> {
+    // before create new reservation remove userId to concertEntity and -reserved seat +cancel seat
+    const concert = await this.concertService.getConcertById(concertId);
+    await this.concertService.cancelSeat(concert._id, userId);
+
+    const reservation = this.reserveRepository.create({ username, userId, action: ReservationAction.CANCEL, concertId, concertName });
     return this.reserveRepository.save(reservation);
   }
 

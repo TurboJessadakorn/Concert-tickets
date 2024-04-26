@@ -73,6 +73,7 @@ export class ConcertService {
         }
 
         concert.reservedSeats--;
+        concert.numberOfCancels++;
         concert.reservedBy = concert.reservedBy.filter(id => id !== userId);
 
         await this.concertRepository.save(concert);

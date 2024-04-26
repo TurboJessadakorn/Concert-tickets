@@ -25,7 +25,7 @@ export class ReserveController {
                 throw new BadRequestException('User has already reserved a seat for this concert');
             }
 
-            return this.reserveService.reserve(createReservationDto.username, createReservationDto.userId, createReservationDto.concertId);
+            return this.reserveService.reserve(createReservationDto.username, createReservationDto.userId, createReservationDto.concertId, createReservationDto.concertName);
         } catch (error) {
             throw error;
         }
@@ -40,7 +40,14 @@ export class ReserveController {
             if (createReservationDto.action !== ReservationAction.CANCEL) {
                 throw new ForbiddenException('Invalid action');
             }
-            return this.reserveService.cancel(createReservationDto.username, createReservationDto.userId, createReservationDto.concertId);
+
+            // Check if the user has already reserved a seat in this concert
+            const hasReserved = await this.reserveService.hasUserReserved(createReservationDto.userId, createReservationDto.concertId);
+            if (!hasReserved) {
+                throw new BadRequestException('User has not reserved a seat for this concert');
+            }
+
+            return this.reserveService.cancel(createReservationDto.username, createReservationDto.userId, createReservationDto.concertId, createReservationDto.concertName);
         } catch (error) {
             throw error;
         }

@@ -5,7 +5,7 @@ interface HistoryProps {
 }
 
 interface ReservationProps {
-  date: string;
+  createDate: string;
   username: string;
   concertName: number;
   action: number;
@@ -30,6 +30,7 @@ export default function History({ isAdmin }: HistoryProps) {
         return response.json();
       })
       .then(data => {
+        console.log(data)
         setReservations(data);
       })
       .catch(error => console.error('There was a problem with the request:', error));
@@ -48,9 +49,11 @@ export default function History({ isAdmin }: HistoryProps) {
             </tr>
           </thead>
           <tbody>
-            {reservations.map((reservation, index) => (
+            {reservations && reservations.map((reservation, index) => (
               <tr key={index} className="bg-transparent border border-black border-opacity-100">
-                <td className="border border-black border-opacity-100 p-2 text-left">{reservation.date}</td>
+                <td className="border border-black border-opacity-100 p-2 text-left">
+                  {new Date(reservation.createDate).toLocaleString()}
+                </td>
                 <td className="border border-black border-opacity-100 p-2 text-left">{reservation.username}</td>
                 <td className="border border-black border-opacity-100 p-2 text-left">{reservation.concertName}</td>
                 <td className="border border-black border-opacity-100 p-2 text-left">{reservation.action}</td>

@@ -59,7 +59,6 @@ export default function Home({ isAdmin }: HomeProps) {
   // re-fetch concerts after action 
   const handleReserveAction = async () => {
     fetchConcerts();
-    setView("overview")
   };
 
   // display the confirmation modal to delete slected concert
@@ -216,7 +215,7 @@ export default function Home({ isAdmin }: HomeProps) {
               totalSeats={concert.totalSeats}
               reservedSeats={concert.reservedSeats}
               isReserved={concert.isReserved}
-              onAction={() => handleReserveAction}
+              onAction={handleReserveAction}
             />
           ))}
         </>

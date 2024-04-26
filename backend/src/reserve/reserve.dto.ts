@@ -6,6 +6,9 @@ export class CreateReservationDto {
   @IsNotEmpty()
   username: string;
 
+  @IsNotEmpty()
+  concertName: string;
+
   @IsEnum(ReservationAction)
   action: ReservationAction;
 

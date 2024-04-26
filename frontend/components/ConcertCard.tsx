@@ -12,7 +12,7 @@ interface ConcertCardProps {
 function ConcertCard({ name, description, totalSeats, reservedSeats, onDelete }: ConcertCardProps) {
     const confirmConcertDelete = () => {
         onDelete(name);
-    }
+    };
     return (
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
             <h2 className="text-blue-custom text-3xl font-semibold mb-4 border-b-2 pb-4">{name}</h2>

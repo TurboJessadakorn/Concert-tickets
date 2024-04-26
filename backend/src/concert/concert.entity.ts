@@ -20,8 +20,8 @@ export class Concert {
   @Column({ default: 0 })
   numberOfCancels: number = 0;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createDate: Date;
+  @Column({ type: 'timestamp', default: new Date() })
+  createDate: Date = new Date();
 
   // Array of user IDs who have reserved seats
   @Column({ type: 'array', default: [] })

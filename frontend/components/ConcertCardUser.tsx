@@ -7,7 +7,7 @@ interface ConcertCardProps {
     totalSeats: number;
     reservedSeats: number;
     isReserved: boolean;
-    onAction: (action: string) => void
+    onAction: () => void
 }
 
 function ConcertCard({ name, id, description, totalSeats, reservedSeats, isReserved, onAction }: ConcertCardProps) {
@@ -19,6 +19,7 @@ function ConcertCard({ name, id, description, totalSeats, reservedSeats, isReser
             username: 'user12345',
             action: 'reserve',
             concertId: id,
+            concertName: name,
             userId: 'user123',
           };
         fetch(`http://localhost:8080/reserve/reserve`, {
@@ -32,12 +33,13 @@ function ConcertCard({ name, id, description, totalSeats, reservedSeats, isReser
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');
+            } else{
+              onAction();
             }
             return response.json();
           })
           .then(data => {
             console.log(data);
-            onAction('Reserve');
           })
           .catch(error => console.error('There was a problem with the request:', error));
     };
@@ -49,9 +51,10 @@ function ConcertCard({ name, id, description, totalSeats, reservedSeats, isReser
             username: 'user12345',
             action: 'cancel',
             concertId: id,
+            concertName: name,
             userId: 'user123',
           };
-        fetch(`http://localhost:8080/cancel/cancel`, {
+        fetch(`http://localhost:8080/reserve/cancel`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -62,12 +65,13 @@ function ConcertCard({ name, id, description, totalSeats, reservedSeats, isReser
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');
+            } else{
+              onAction();
             }
             return response.json();
           })
           .then(data => {
             console.log(data);
-            onAction('Cancel');
           })
           .catch(error => console.error('There was a problem with the request:', error));
     };
