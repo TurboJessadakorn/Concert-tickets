@@ -1,4 +1,5 @@
 import ConcertCard from "@/components/ConcertCard";
+import ConcertCardUser from "@/components/ConcertCardUser";
 import ConcertCreate from "@/components/ConcertCreate";
 import { Modal } from "@/components/ConfirmModal";
 import styles from "@/styles/Home.module.css";
@@ -14,6 +15,7 @@ interface ConcertProps {
   description: string;
   totalSeats: number;
   reservedSeats: number;
+  isReserved: boolean;
 }
 
 export default function Home({ isAdmin }: HomeProps) {
@@ -25,7 +27,9 @@ export default function Home({ isAdmin }: HomeProps) {
 
   const fetchConcerts = async () => {
     const role = isAdmin ? 'admin' : 'user';
-    fetch('http://localhost:8080/concert', {
+    // use constant userId because demo no authentication
+    const userId = '12345'
+    fetch(`http://localhost:8080/concert/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -85,7 +89,7 @@ export default function Home({ isAdmin }: HomeProps) {
 
   useEffect(() => {
     fetchConcerts();
-  }, []);
+  }, [isAdmin]);
   return (
     <div className="sm:pl-64 pl-12 py-12 pr-12">
 
@@ -197,7 +201,18 @@ export default function Home({ isAdmin }: HomeProps) {
 
         // user home page
         <>
-          User
+          {concerts && concerts.map((concert, index) => (
+            <ConcertCardUser
+              key={index}
+              name={concert.name}
+              id={concert._id}
+              description={concert.description}
+              totalSeats={concert.totalSeats}
+              reservedSeats={concert.reservedSeats}
+              isReserved={concert.isReserved}
+              onDelete={() => confirmConcertDelete(concert._id, concert.name)}
+            />
+          ))}
         </>
       )}
     </div>
