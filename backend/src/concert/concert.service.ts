@@ -30,6 +30,20 @@ export class ConcertService {
     async findAllConcerts(): Promise<Concert[]> {
         return this.concertRepository.find();
     }
+    
+    async findAllConcertsWithReservation(userId: string): Promise<object[]> {
+        const concerts = await this.findAllConcerts();
+        
+        const concertsWithReservation = concerts.map(concert => {
+          const isReserved = concert.reservedBy.includes(userId);
+          return {
+            ...concert,
+            isReserved,
+          };
+        });
+      
+        return concertsWithReservation;
+    }
 
     async reserveSeat(concertId: ObjectId, userId: string): Promise<Concert> {
         const concert = await this.concertRepository.findOne({ where: { _id: concertId } });

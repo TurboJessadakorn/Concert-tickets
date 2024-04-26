@@ -41,15 +41,15 @@ export class ConcertController {
     }
   }
 
-  // Retrieve all concerts (for admin)
-  @Get()
-  @UseGuards(AdminGuard)
-  async findAllConcerts(): Promise<object> {
+  // Retrieve all concerts (for user)
+  @Get(':id')
+  @UseGuards(UserGuard)
+  async findAllConcertsWithReservation(userId: string): Promise<object> {
     try {
-      const concerts = await this.concertService.findAllConcerts();
+      const concerts = await this.concertService.findAllConcertsWithReservation(userId);
       return {
         success: true,
-        message: 'Concerts retrieved successfully',
+        message: 'Concerts retrieved successfully with reservation status',
         data: concerts,
       };
     } catch (error) {

@@ -25,5 +25,5 @@ export class Concert {
 
   // Array of user IDs who have reserved seats
   @Column({ type: 'array', default: [] })
-  reservedBy: string[];
+  reservedBy: string[] = [];
 }
