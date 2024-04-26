@@ -22,4 +22,8 @@ export class Concert {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createDate: Date;
+
+  // Array of user IDs who have reserved seats
+  @Column({ type: 'array', default: [] })
+  reservedBy: string[];
 }
