@@ -13,6 +13,9 @@ export class Reserve {
   @Column()
   username: string;
 
+  @Column()
+  userId: string;
+
   @Column({
     type: 'enum',
     enum: ReservationAction,
