@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsEnum, IsInt } from 'class-validator';
 import { ReservationAction } from './reserve.entity';
+import { ObjectId } from 'typeorm';
 
 export class CreateReservationDto {
   @IsNotEmpty()
@@ -10,7 +11,7 @@ export class CreateReservationDto {
 
   @IsNotEmpty()
   @IsInt()
-  concertId: number;
+  concertId: ObjectId;
 
   @IsNotEmpty()
   userId: string;

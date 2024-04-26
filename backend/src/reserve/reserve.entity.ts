@@ -1,4 +1,4 @@
-import { Entity, Column, ObjectIdColumn } from 'typeorm';
+import { Entity, Column, ObjectIdColumn, ObjectId } from 'typeorm';
 
 export enum ReservationAction {
   RESERVE = 'reserve',
@@ -8,7 +8,7 @@ export enum ReservationAction {
 @Entity()
 export class Reserve {
   @ObjectIdColumn()
-  id: number;
+  id: ObjectId;
 
   @Column()
   username: string;
@@ -23,8 +23,8 @@ export class Reserve {
   })
   action: ReservationAction;
 
-  @Column()
-  concertId: number;
+  @ObjectIdColumn()
+  concertId: ObjectId;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createDate: Date;

@@ -15,6 +15,14 @@ export class ConcertService {
         return this.concertRepository.save(concert);
     }
 
+    async getConcertById(concertId: ObjectId): Promise<Concert> {
+        const concert = await this.concertRepository.findOne({ where: { _id: concertId } });
+        if (!concert) {
+            throw new NotFoundException('Concert not found');
+        }
+        return concert;
+    }
+
     async deleteConcert(id: number): Promise<void> {
         await this.concertRepository.delete(id);
     }
