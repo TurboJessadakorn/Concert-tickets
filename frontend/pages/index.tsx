@@ -1,17 +1,59 @@
+import ConcertCard from "@/components/ConcertCard";
 import ConcertCreate from "@/components/ConcertCreate";
 import styles from "@/styles/Home.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface HomeProps {
   isAdmin: boolean;
 }
 
+interface ConcertProps {
+  _id: string;
+  name: string;
+  description: string;
+  totalSeats: number;
+  reservedSeats: number;
+}
+
 export default function Home({ isAdmin }: HomeProps) {
   const [view, setView] = useState("overview");
+  const [concerts, setConcerts] = useState<ConcertProps[]>();
 
-  const handleCreateConcert = async () => {
-
+  const fetchConcerts = async () => {
+    const role = isAdmin ? 'admin' : 'user';
+    fetch('http://localhost:8080/concert', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'role': role
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setConcerts(data.data);
+        console.log(data);
+      })
+      .catch(error => console.error('There was a problem with the request:', error));
   };
+
+  // re-fetch concerts after created and set view to overview tab
+  const handleCreateConcert = async () => {
+    fetchConcerts();
+    setView("overview")
+  };
+
+  const confirmConcertDelete = (concert: string) => {
+
+  }
+
+  useEffect(() => {
+    fetchConcerts();
+  }, []); 
   return (
     <div className="sm:pl-64 pl-12 py-12 pr-12">
 
@@ -74,6 +116,16 @@ export default function Home({ isAdmin }: HomeProps) {
             {/* Overview Concert */}
             {view === "overview" &&
               <>
+                {concerts && concerts.map((concert, index) => (
+                  <ConcertCard
+                    key={index}
+                    name={concert.name}
+                    description={concert.description}
+                    totalSeats={concert.totalSeats}
+                    reservedSeats={concert.reservedSeats}
+                    onDelete={() => confirmConcertDelete(concert.name)}
+                  />
+                ))}
               </>
             }
 
