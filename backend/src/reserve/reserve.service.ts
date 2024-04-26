@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId, Repository } from 'typeorm';
 import { Reserve, ReservationAction } from './reserve.entity';
-import { ConcertService } from 'src/concert/concert.service';
+import { ConcertService } from '../concert/concert.service';
 
 @Injectable()
 export class ReserveService {

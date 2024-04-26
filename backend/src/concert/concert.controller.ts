@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, HttpException, Param, Post, UseGuards, V
 import { Concert } from './concert.entity';
 import { ConcertService } from './concert.service';
 import { CreateConcertDto } from './concert.dto';
-import { UserGuard } from 'src/guards/user.guard';
-import { AdminGuard } from 'src/guards/admin.guard';
+import { UserGuard } from '../guards/user.guard';
+import { AdminGuard } from '../guards/admin.guard';
 import { ObjectId } from 'typeorm';
 
 @Controller('concert')
