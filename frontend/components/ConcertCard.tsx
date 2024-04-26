@@ -2,6 +2,7 @@ import React from 'react';
 
 interface ConcertCardProps {
     name: string;
+    id: string;
     description: string;
     totalSeats: number;
     reservedSeats: number;

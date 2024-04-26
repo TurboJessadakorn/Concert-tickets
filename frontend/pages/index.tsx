@@ -1,7 +1,8 @@
 import ConcertCard from "@/components/ConcertCard";
 import ConcertCreate from "@/components/ConcertCreate";
+import { Modal } from "@/components/ConfirmModal";
 import styles from "@/styles/Home.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface HomeProps {
   isAdmin: boolean;
@@ -18,6 +19,9 @@ interface ConcertProps {
 export default function Home({ isAdmin }: HomeProps) {
   const [view, setView] = useState("overview");
   const [concerts, setConcerts] = useState<ConcertProps[]>();
+  const [selectConcertId, setSelectConcertId] = useState<string>();
+  const [selectConcertName, setSelectConcertName] = useState<string>();
+  const modalRef = useRef<HTMLDialogElement>(null)
 
   const fetchConcerts = async () => {
     const role = isAdmin ? 'admin' : 'user';
@@ -43,17 +47,45 @@ export default function Home({ isAdmin }: HomeProps) {
 
   // re-fetch concerts after created and set view to overview tab
   const handleCreateConcert = async () => {
+    alert('Create concert success');
     fetchConcerts();
     setView("overview")
   };
 
-  const confirmConcertDelete = (concert: string) => {
-
+  // display the confirmation modal to delete slected concert
+  const confirmConcertDelete = (concertId: string, concertName: string) => {
+    setSelectConcertId(concertId);
+    setSelectConcertName(concertName);
+    modalRef?.current?.showModal();
   }
+
+  // delete selected concert
+  const handleDeleteConcert = async () => {
+    const role = isAdmin ? 'admin' : 'user';
+    fetch(`http://localhost:8080/concert/${selectConcertId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'role': role
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        modalRef?.current?.close();
+        fetchConcerts();
+      })
+      .catch(error => console.error('There was a problem with the request:', error));
+  };
 
   useEffect(() => {
     fetchConcerts();
-  }, []); 
+  }, []);
   return (
     <div className="sm:pl-64 pl-12 py-12 pr-12">
 
@@ -120,12 +152,36 @@ export default function Home({ isAdmin }: HomeProps) {
                   <ConcertCard
                     key={index}
                     name={concert.name}
+                    id={concert._id}
                     description={concert.description}
                     totalSeats={concert.totalSeats}
                     reservedSeats={concert.reservedSeats}
-                    onDelete={() => confirmConcertDelete(concert.name)}
+                    onDelete={() => confirmConcertDelete(concert._id, concert.name)}
                   />
                 ))}
+
+                <Modal ref={modalRef} >
+                  <div className="py-2 flex justify-center">
+                    <svg className="h-12 w-12" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 50 50"
+                      fill='#FA5252'>
+                      <path d="M25,2C12.319,2,2,12.319,2,25s10.319,23,23,23s23-10.319,23-23S37.681,2,25,2z M33.71,32.29c0.39,0.39,0.39,1.03,0,1.42	C33.51,33.9,33.26,34,33,34s-0.51-0.1-0.71-0.29L25,26.42l-7.29,7.29C17.51,33.9,17.26,34,17,34s-0.51-0.1-0.71-0.29	c-0.39-0.39-0.39-1.03,0-1.42L23.58,25l-7.29-7.29c-0.39-0.39-0.39-1.03,0-1.42c0.39-0.39,1.03-0.39,1.42,0L25,23.58l7.29-7.29	c0.39-0.39,1.03-0.39,1.42,0c0.39,0.39,0.39,1.03,0,1.42L26.42,25L33.71,32.29z">
+                      </path>
+                    </svg>
+                  </div>
+                  <div className="py-3 flex flex-col">
+                    <p className="text-xl font-bold text-center">Are you sure to delete?</p>
+                    <br></br>
+                    <p className="text-xl font-bold text-center">{selectConcertName}</p>
+                  </div>
+                  <div className="grid grid-cols-2 w-full gap-4 p-2">
+                    <button className="btn w-full border-gray-400 bg-transparent hover:text-white hover:bg-gray-200" onClick={() => modalRef?.current?.close()}>
+                      Cancel
+                    </button>
+                    <button className="btn w-full bg-red-500 text-white hover:text-white hover:bg-red-800" onClick={handleDeleteConcert}>
+                      Yes, Delete
+                    </button>
+                  </div>
+                </Modal>
               </>
             }
 
