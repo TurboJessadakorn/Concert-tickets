@@ -1,9 +1,10 @@
 import Sidebar from "@/components/sidebar";
 import "@/styles/globals.css";
+import { AnimatePresence, motion } from "framer-motion";
 import type { AppProps } from "next/app";
 import { useState, useEffect } from "react";
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps, router }: AppProps) {
   const [isAdmin, setIsAdmin] = useState(true);
 
   useEffect(() => {
@@ -24,9 +25,27 @@ export default function App({ Component, pageProps }: AppProps) {
   };
 
   return (
-    <>
-      <Sidebar isAdmin={isAdmin} toggleUserRole={toggleUserRole} />
-      <Component {...pageProps} isAdmin={isAdmin} />
-    </>
+    <AnimatePresence mode="wait" key={router.asPath}>
+      <motion.div
+        initial="initialState"
+        animate="animateState"
+        exit="exitState"
+        transition={{
+          duration: 0.75,
+        }}
+        variants={{
+          initialState: {
+            opacity: 0,
+          },
+          animateState: {
+            opacity: 1,
+          },
+          exitState: {},
+        }}
+      >
+        <Sidebar isAdmin={isAdmin} toggleUserRole={toggleUserRole} />
+        <Component {...pageProps} isAdmin={isAdmin} />
+      </motion.div>
+    </AnimatePresence>
   );
 }
