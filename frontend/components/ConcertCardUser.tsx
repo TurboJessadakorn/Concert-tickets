@@ -7,15 +7,69 @@ interface ConcertCardProps {
     totalSeats: number;
     reservedSeats: number;
     isReserved: boolean;
-    onDelete: (name: string) => void
+    onAction: (action: string) => void
 }
 
-function ConcertCard({ name, description, totalSeats, reservedSeats, isReserved, onDelete }: ConcertCardProps) {
-    const confirmConcertDelete = () => {
-        onDelete(name);
-    };
+function ConcertCard({ name, id, description, totalSeats, reservedSeats, isReserved, onAction }: ConcertCardProps) {
     const handleReserve = async () => {
+        const role = 'user';
 
+        // use constant username and userId because demo no authentication
+        const reserveData = {
+            username: 'user12345',
+            action: 'reserve',
+            concertId: id,
+            userId: 'user123',
+          };
+        fetch(`http://localhost:8080/reserve/reserve`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'role': role
+          },
+          body: JSON.stringify(reserveData)
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log(data);
+            onAction('Reserve');
+          })
+          .catch(error => console.error('There was a problem with the request:', error));
+    };
+    const handleCancel = async () => {
+        const role = 'user';
+
+        // use constant username and userId because demo no authentication
+        const cancelData = {
+            username: 'user12345',
+            action: 'cancel',
+            concertId: id,
+            userId: 'user123',
+          };
+        fetch(`http://localhost:8080/cancel/cancel`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'role': role
+          },
+          body: JSON.stringify(cancelData)
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log(data);
+            onAction('Cancel');
+          })
+          .catch(error => console.error('There was a problem with the request:', error));
     };
     return (
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
@@ -30,11 +84,11 @@ function ConcertCard({ name, description, totalSeats, reservedSeats, isReserved,
                     {reservedSeats} / {totalSeats}
                 </div>
                 {isReserved ? (
-                    <button className="bg-red-500 text-white w-28 py-2 rounded-sm shadow-sm hover:bg-red-700 flex items-center text-lg justify-center" onClick={confirmConcertDelete}>
+                    <button onClick={handleCancel} className="bg-red-500 text-white w-28 py-2 rounded-sm shadow-sm hover:bg-red-700 flex items-center text-lg justify-center">
                         Cancel
                     </button>
                 ) : (
-                    <button className="bg-blue-custom text-white w-28 py-2 rounded-sm shadow-sm hover:bg-red-700 flex items-center text-lg justify-center" onClick={confirmConcertDelete}>
+                    <button onClick={handleReserve} className="bg-blue-custom text-white w-28 py-2 rounded-sm shadow-sm hover:bg-red-700 flex items-center text-lg justify-center">
                         Reserve
                     </button>
                 )}
