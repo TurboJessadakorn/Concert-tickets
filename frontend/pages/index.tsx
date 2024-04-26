@@ -23,6 +23,9 @@ export default function Home({ isAdmin }: HomeProps) {
   const [concerts, setConcerts] = useState<ConcertProps[]>();
   const [selectConcertId, setSelectConcertId] = useState<string>();
   const [selectConcertName, setSelectConcertName] = useState<string>();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); //control create concert success msg
+  const [showDeleteMessage, setShowDeleteMessage] = useState(false); //control create Delete success msg
+  const [showReservationMessage, setShowReservationMessage] = useState(false); //control create reservation success msg
   const modalRef = useRef<HTMLDialogElement>(null)
 
   const fetchConcerts = async () => {
@@ -51,14 +54,21 @@ export default function Home({ isAdmin }: HomeProps) {
 
   // re-fetch concerts after created and set view to overview tab
   const handleCreateConcert = async () => {
-    alert('Create concert success');
     fetchConcerts();
-    setView("overview")
+    setView("overview");
+    setShowSuccessMessage(true);
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 3000);
   }
 
   // re-fetch concerts after action 
   const handleReserveAction = async () => {
     fetchConcerts();
+    setShowReservationMessage(true);
+    setTimeout(() => {
+      setShowReservationMessage(false);
+    }, 3000);
   };
 
   // display the confirmation modal to delete slected concert
@@ -88,6 +98,10 @@ export default function Home({ isAdmin }: HomeProps) {
         console.log(data);
         modalRef?.current?.close();
         fetchConcerts();
+        setShowDeleteMessage(true);
+        setTimeout(() => {
+          setShowDeleteMessage(false);
+        }, 3000);
       })
       .catch(error => console.error('There was a problem with the request:', error));
   };
@@ -220,6 +234,31 @@ export default function Home({ isAdmin }: HomeProps) {
           ))}
         </>
       )}
+
+      {/* message display after admin create concert */}
+      {showSuccessMessage && (
+        <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 fixed top-5 right-5 flex align-center" role="alert">
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span className="font-medium">Create concert success!</span>
+        </div>
+      )}
+
+      {/* message display after admin delete concert */}
+      {showDeleteMessage && (
+        <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 fixed top-5 right-5 flex align-center" role="alert">
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span className="font-medium">Delete concert success!</span>
+        </div>
+      )}
+
+      {/* message display after user update reservation */}
+      {showReservationMessage && (
+        <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 fixed top-5 right-5 flex align-center" role="alert">
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span className="font-medium">Update reservation success!</span>
+        </div>
+      )}
+
     </div>
   );
 }
