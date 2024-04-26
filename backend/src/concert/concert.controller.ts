@@ -60,7 +60,7 @@ export class ConcertController {
   // Reserve a seat for a concert (for user)
   @Post(':id/reserve/:userId')
   @UseGuards(UserGuard)
-  async reserveSeatConcert(@Param('id') id: ObjectId, @Param('userId') userId: string): Promise<object> {
+  async reserveSeat(@Param('id') id: ObjectId, @Param('userId') userId: string): Promise<object> {
     try {
       const updatedConcert = await this.concertService.reserveSeat(id, userId);
       return {
