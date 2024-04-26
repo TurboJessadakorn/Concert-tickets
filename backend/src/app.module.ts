@@ -11,9 +11,9 @@ import { Reserve } from './reserve/reserve.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      host: 'localhost',
-      port: 27017,
-      database: 'concert-ticketdb',
+      host: process.env.MONGODB_HOST || 'localhost',
+      port: parseInt(process.env.MONGODB_PORT || '27017'),
+      database: process.env.MONGODB_DB_NAME || 'concert-ticketdb',
       entities: [Reserve, Concert],
       synchronize: true,
     }),

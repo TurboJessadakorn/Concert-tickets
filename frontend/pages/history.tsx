@@ -16,7 +16,10 @@ export default function History({ isAdmin }: HistoryProps) {
 
   useEffect(() => {
     const role = isAdmin ? 'admin' : 'user';
-    fetch('http://localhost:8080/reserve/admin', {
+    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:';
+    const URL = process.env.NEXT_PUBLIC_PORT || '8080';
+
+    fetch(`${BASE_URL}${URL}/reserve/admin`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

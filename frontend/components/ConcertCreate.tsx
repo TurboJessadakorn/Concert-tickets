@@ -27,7 +27,9 @@ function ConcertCreate({ onCreate }: ConcertCreateProps) {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/concert', {
+      const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:';
+      const URL = process.env.NEXT_PUBLIC_PORT || '8080';
+      const response = await fetch(`${BASE_URL}${URL}/concert`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

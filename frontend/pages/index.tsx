@@ -35,7 +35,9 @@ export default function Home({ isAdmin }: HomeProps) {
     const role = isAdmin ? 'admin' : 'user';
   
     try {
-      const response = await fetch(`http://localhost:8080/concert/stats/count`, {
+      const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:';
+      const URL = process.env.NEXT_PUBLIC_PORT || '8080';
+      const response = await fetch(`${BASE_URL}${URL}/concert/stats/count`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -69,9 +71,12 @@ export default function Home({ isAdmin }: HomeProps) {
 
   const fetchConcerts = async () => {
     const role = isAdmin ? 'admin' : 'user';
+    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:';
+    const URL = process.env.NEXT_PUBLIC_PORT || '8080';
+
     // use constant userId because demo no authentication
     const userId = 'user123'
-    fetch(`http://localhost:8080/concert/${userId}`, {
+    fetch(`${BASE_URL}${URL}/concert/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -121,7 +126,10 @@ export default function Home({ isAdmin }: HomeProps) {
   // delete selected concert
   const handleDeleteConcert = async () => {
     const role = isAdmin ? 'admin' : 'user';
-    fetch(`http://localhost:8080/concert/${selectConcertId}`, {
+    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:';
+    const URL = process.env.NEXT_PUBLIC_PORT || '8080';
+    
+    fetch(`${BASE_URL}${URL}/concert/${selectConcertId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

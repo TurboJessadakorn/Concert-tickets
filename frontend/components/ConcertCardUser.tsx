@@ -13,6 +13,8 @@ interface ConcertCardProps {
 function ConcertCard({ name, id, description, totalSeats, reservedSeats, isReserved, onAction }: ConcertCardProps) {
     const handleReserve = async () => {
         const role = 'user';
+        const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:';
+        const URL = process.env.NEXT_PUBLIC_PORT || '8080';
 
         // use constant username and userId because demo no authentication
         const reserveData = {
@@ -22,7 +24,7 @@ function ConcertCard({ name, id, description, totalSeats, reservedSeats, isReser
             concertName: name,
             userId: 'user123',
           };
-        fetch(`http://localhost:8080/reserve/reserve`, {
+        fetch(`${BASE_URL}${URL}/reserve/reserve`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
