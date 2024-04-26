@@ -263,7 +263,7 @@ export default function Home({ isAdmin }: HomeProps) {
       ) : (
 
         // user home page
-        <>
+        <div className="space-y-4">
           {concerts && concerts.map((concert, index) => (
             <ConcertCardUser
               key={index}
@@ -276,7 +276,7 @@ export default function Home({ isAdmin }: HomeProps) {
               onAction={handleReserveAction}
             />
           ))}
-        </>
+        </div>
       )}
 
       {/* message display after admin create concert */}
