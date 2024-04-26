@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConcertModule } from './concert/concert.module';
+import { ReserveModule } from './reserve/reserve.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [],
       synchronize: true,
     }),
+    ConcertModule,
+    ReserveModule,
   ],
   controllers: [AppController],
   providers: [AppService],
