@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConcertModule } from './concert/concert.module';
 import { ReserveModule } from './reserve/reserve.module';
+import { Concert } from './concert/concert.entity';
+import { Reserve } from './reserve/reserve.entity';
 
 @Module({
   imports: [
@@ -12,7 +14,7 @@ import { ReserveModule } from './reserve/reserve.module';
       host: 'localhost',
       port: 27017,
       database: 'concert-ticketdb',
-      entities: [],
+      entities: [Reserve, Concert],
       synchronize: true,
     }),
     ConcertModule,
