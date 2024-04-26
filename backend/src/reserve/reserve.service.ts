@@ -13,6 +13,10 @@ export class ReserveService {
   ) {}
 
   async reserve(username: string, userId: string, concertId: ObjectId): Promise<Reserve> {
+    // before create new reservation add userId to concertEntity and +total seat
+    const concert = await this.concertService.getConcertById(concertId);
+    await this.concertService.reserveSeat(concert._id, userId);
+
     const reserve = this.reserveRepository.create({ username, userId, action: ReservationAction.RESERVE, concertId });
     return this.reserveRepository.save(reserve);
   }
