@@ -5,12 +5,47 @@ interface ConcertCreateProps {
 }
 
 function ConcertCreate({ onCreate }: ConcertCreateProps) {
-  const [concertName, setConcertName] = useState('');
+  const [concertName, setConcertName] = useState("");
   const [totalSeats, setTotalSeats] = useState<number>(500);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
 
   const handleCreateConcert = async () => {
+    if (concertName === "" || description === "") {
+      alert('Please enter a name and description');
+      return;
+    }
 
+    if (totalSeats === 0) {
+      alert('Total seats can not be 0');
+      return;
+    }
+
+    const concertData = {
+      name: concertName,
+      description,
+      totalSeats: totalSeats
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/concert', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'role': 'admin'
+        },
+        body: JSON.stringify(concertData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create concert');
+      } else {
+        onCreate();
+      }
+
+
+    } catch (error) {
+      console.error('Error creating concert:', error);
+    }
   };
 
   return (
@@ -20,18 +55,18 @@ function ConcertCreate({ onCreate }: ConcertCreateProps) {
       <div className="grid grid-cols-2 gap-4">
         {/* concert name */}
         <div className="mb-4">
-          <label htmlFor="concertName" className="block text-gray-700 font-semibold mb-2">Concert Name</label>
+          <label htmlFor="concertName" className="block text-gray-700 font-semibold mb-3 text-xl">Concert Name</label>
           <input type="text" id="concertName" placeholder="Please input concert name" className="block w-full p-2 border border-gray-500 rounded-md shadow-sm" value={concertName} onChange={(e) => setConcertName(e.target.value)} />
         </div>
         {/* total seats */}
         <div className="mb-4">
-          <label htmlFor="totalSeats" className="block text-gray-700 font-semibold mb-2">Total of Seats</label>
-          <input type="number" id="totalSeats" placeholder="500" className="block w-full p-2 border border-gray-500 rounded-md shadow-sm" value={totalSeats} onChange={(e) => setTotalSeats(isNaN(parseInt(e.target.value, 10)) ? 0 : parseInt(e.target.value, 10))} />
+          <label htmlFor="totalSeats" className="block text-gray-700 font-semibold mb-3 text-xl">Total of Seats</label>
+          <input min={1} type="number" id="totalSeats" placeholder="500" className="block w-full p-2 border border-gray-500 rounded-md shadow-sm" value={totalSeats} onChange={(e) => setTotalSeats(isNaN(parseInt(e.target.value, 10)) ? 0 : parseInt(e.target.value, 10))} />
         </div>
       </div>
       {/* concert description */}
       <div className="mb-4">
-        <label htmlFor="description" className="block text-gray-700 font-semibold mb-2">Description</label>
+        <label htmlFor="description" className="block text-gray-700 font-semibold mb-3 text-xl">Description</label>
         <textarea id="description" placeholder="Please input description" className="block w-full p-2 border border-gray-500 rounded-md shadow-sm" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
       </div>
 
