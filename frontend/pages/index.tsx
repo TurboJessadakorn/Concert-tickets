@@ -1,3 +1,4 @@
+import ConcertCreate from "@/components/ConcertCreate";
 import styles from "@/styles/Home.module.css";
 import { useState } from "react";
 
@@ -8,6 +9,9 @@ interface HomeProps {
 export default function Home({ isAdmin }: HomeProps) {
   const [view, setView] = useState("overview");
 
+  const handleCreateConcert = async () => {
+
+  };
   return (
     <div className="sm:pl-64 pl-12 py-12 pr-12">
 
@@ -15,7 +19,7 @@ export default function Home({ isAdmin }: HomeProps) {
       {isAdmin ? (
         <>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Total seat card */}
+            {/* Total seat */}
             <div className={`${styles.card} bg-sky-700 space-y-2 text-white shadow-md`}>
               <svg className="h-9 w-9" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><g id="Guide" /><g id="Layer_2"><g>
                 <path fill="#ffffff" d="M8,7c1.38,0,2.5-1.12,2.5-2.5S9.38,2,8,2S5.5,3.12,5.5,4.5S6.62,7,8,7z M8,3c0.83,0,1.5,0.67,1.5,1.5S8.83,6,8,6    S6.5,5.33,6.5,4.5S7.17,3,8,3z" />
@@ -76,6 +80,7 @@ export default function Home({ isAdmin }: HomeProps) {
             {/* Create Concert */}
             {view === "create" &&
               <>
+                <ConcertCreate onCreate={handleCreateConcert}></ConcertCreate>
               </>
             }
           </div>
