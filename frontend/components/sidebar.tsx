@@ -70,7 +70,7 @@ function Sidebar({ isAdmin, toggleUserRole }: SidebarProps) {
                             </li>
                         )}
                         <li>
-                            <a onClick={toggleUserRole} className="flex items-center px-2 py-3 text-gray-900 rounded-lg hover:bg-gray-200 group">
+                            <a href="/" onClick={toggleUserRole} className="flex items-center px-2 py-3 text-gray-900 rounded-lg hover:bg-gray-200 group">
                                 <svg className="w-5 h-5 transition duration-75 group-hover:text-gray-900" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="17 1 21 5 17 9" />
                                     <path d="M3 11V9a4 4 0 0 1 4-4h14" /><polyline points="7 23 3 19 7 15" />
                                     <path d="M21 13v2a4 4 0 0 1-4 4H3" /></svg>
