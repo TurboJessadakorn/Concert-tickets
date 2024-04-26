@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectId, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Concert } from './concert.entity';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class ConcertService {
@@ -16,7 +17,8 @@ export class ConcertService {
     }
 
     async getConcertById(concertId: ObjectId): Promise<Concert> {
-        const concert = await this.concertRepository.findOne({ where: { _id: concertId } });
+        const convertedConcertId = new ObjectId(concertId);
+        const concert = await this.concertRepository.findOne({ where: { _id: convertedConcertId } });
         if (!concert) {
             throw new NotFoundException('Concert not found');
         }
@@ -33,7 +35,6 @@ export class ConcertService {
     
     async findAllConcertsWithReservation(userId: string): Promise<object[]> {
         const concerts = await this.findAllConcerts();
-        
         const concertsWithReservation = concerts.map(concert => {
           const isReserved = concert.reservedBy.includes(userId);
           return {
