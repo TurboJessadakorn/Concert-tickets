@@ -28,7 +28,7 @@ export default function Home({ isAdmin }: HomeProps) {
   const fetchConcerts = async () => {
     const role = isAdmin ? 'admin' : 'user';
     // use constant userId because demo no authentication
-    const userId = '12345'
+    const userId = 'user123'
     fetch(`http://localhost:8080/concert/${userId}`, {
       method: 'GET',
       headers: {
@@ -52,6 +52,12 @@ export default function Home({ isAdmin }: HomeProps) {
   // re-fetch concerts after created and set view to overview tab
   const handleCreateConcert = async () => {
     alert('Create concert success');
+    fetchConcerts();
+    setView("overview")
+  }
+
+  // re-fetch concerts after action 
+  const handleReserveAction = async () => {
     fetchConcerts();
     setView("overview")
   };
@@ -210,7 +216,7 @@ export default function Home({ isAdmin }: HomeProps) {
               totalSeats={concert.totalSeats}
               reservedSeats={concert.reservedSeats}
               isReserved={concert.isReserved}
-              onDelete={() => confirmConcertDelete(concert._id, concert.name)}
+              onAction={() => handleReserveAction}
             />
           ))}
         </>

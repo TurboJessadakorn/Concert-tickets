@@ -41,10 +41,10 @@ export class ConcertController {
     }
   }
 
-  // Retrieve all concerts (for user)
-  @Get(':id')
+  // Retrieve all concerts get userid to find reserved status(for user)
+  @Get(':userId')
   @UseGuards(UserGuard)
-  async findAllConcertsWithReservation(userId: string): Promise<object> {
+  async findAllConcertsWithReservation(@Param('userId') userId: string): Promise<object> {
     try {
       const concerts = await this.concertService.findAllConcertsWithReservation(userId);
       return {
