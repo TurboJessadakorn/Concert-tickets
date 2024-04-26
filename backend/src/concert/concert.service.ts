@@ -32,17 +32,17 @@ export class ConcertService {
     async findAllConcerts(): Promise<Concert[]> {
         return this.concertRepository.find();
     }
-    
+
     async findAllConcertsWithReservation(userId: string): Promise<object[]> {
         const concerts = await this.findAllConcerts();
         const concertsWithReservation = concerts.map(concert => {
-          const isReserved = concert.reservedBy.includes(userId);
-          return {
-            ...concert,
-            isReserved,
-          };
+            const isReserved = concert.reservedBy.includes(userId);
+            return {
+                ...concert,
+                isReserved,
+            };
         });
-      
+
         return concertsWithReservation;
     }
 
@@ -77,5 +77,23 @@ export class ConcertService {
         concert.reservedBy = concert.reservedBy.filter(id => id !== userId);
 
         await this.concertRepository.save(concert);
+    }
+
+    async getTotalSeats(): Promise<number> {
+        const concerts = await this.concertRepository.find();
+        const totalSeats = concerts.reduce((acc, concert) => acc + concert.totalSeats, 0);
+        return totalSeats;
+    }
+
+    async getTotalReservedSeats(): Promise<number> {
+        const concerts = await this.concertRepository.find();
+        const totalReservedSeats = concerts.reduce((acc, concert) => acc + concert.reservedSeats, 0);
+        return totalReservedSeats;
+    }
+
+    async getTotalCanceledSeats(): Promise<number> {
+        const concerts = await this.concertRepository.find();
+        const totalCanceledSeats = concerts.reduce((acc, concert) => acc + concert.numberOfCancels, 0);
+        return totalCanceledSeats;
     }
 }

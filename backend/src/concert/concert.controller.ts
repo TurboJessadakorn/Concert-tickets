@@ -88,4 +88,26 @@ export class ConcertController {
       throw error;
     }
   }
+
+  // Get each seats count to display on admin page
+  @Get('stats/count')
+  @UseGuards(AdminGuard)
+  async getConcertStats(): Promise<object> {
+    try {
+      const totalSeats = await this.concertService.getTotalSeats();
+      const totalReservedSeats = await this.concertService.getTotalReservedSeats();
+      const totalCanceledSeats = await this.concertService.getTotalCanceledSeats();
+      return {
+        success: true,
+        message: 'Concert statistics retrieved successfully',
+        data: {
+          totalSeats,
+          totalReservedSeats,
+          totalCanceledSeats,
+        },
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
